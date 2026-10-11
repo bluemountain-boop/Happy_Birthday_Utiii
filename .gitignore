@@ -1,5 +1,7 @@
 # QA and temp proposals
 qa-*
 proposal-*
+documentation/*.png
+documentation/*.jpg
 src/models/optimization-stages/
 Nailong 3D.glb

@@ -1,12 +1,14 @@
 const state = {
-  musicEnabled: false,
+  musicEnabled: true,
   musicVolume: 0.7,
   muted: false,
   audio: null,
   audioError: '',
+  userHasManuallyPaused: false,
   reduceMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
 };
 let audioControlsInitialized = false;
+let autoplayInitiated = false;
 let homeSceneCleanup = null;
 let editorialCollageCleanup = null;
 let navigationController = null;
@@ -37,6 +39,7 @@ function ensureAudio() {
     audio.src = './src/aud/Happy-Birthday-lofi_007_128k.mp3';
     audio.loop = true;
     audio.preload = 'auto';
+    audio.autoplay = true;
     audio.volume = state.musicVolume;
     audio.hidden = true;
     audio.addEventListener('error', () => {
@@ -96,12 +99,12 @@ function syncAudioUi() {
   });
 
   const status = state.audioError ? 'Pemutaran terhalang' : (
-    state.musicEnabled ? (state.muted ? 'Dibisukan' : 'Sedang diputar') : 'Dijeda'
+    state.musicEnabled ? (state.muted ? 'Dibisukan' : 'Sedang diputar') : 'Siap diputar'
   );
   const statusDescription = state.audioError || (
     state.musicEnabled
       ? (state.muted ? 'Musik sedang diputar tanpa suara.' : 'Musik sedang diputar.')
-      : 'Musik dijeda. Tekan Putar untuk memulai.'
+      : (state.userHasManuallyPaused ? 'Musik dijeda. Tekan Putar untuk melanjutkan.' : 'Musik siap diputar · ketuk layar untuk mendengarkan')
   );
   document.querySelectorAll('.audio-status').forEach((item) => {
     item.textContent = status;
@@ -115,15 +118,52 @@ function syncAudioUi() {
   updateVolumeUi();
 }
 
+async function tryAutoPlayMusic() {
+  if (autoplayInitiated) return;
+  autoplayInitiated = true;
+
+  const audio = ensureAudio();
+  audio.volume = state.musicVolume;
+  audio.muted = state.muted;
+
+  try {
+    await audio.play();
+    state.audioError = '';
+    syncAudioUi();
+  } catch (error) {
+    // Browser autoplay policy restricted audio until user interaction
+    const unlockPlayback = async () => {
+      ['pointerdown', 'touchstart', 'mousedown', 'keydown', 'click'].forEach((event) => {
+        window.removeEventListener(event, unlockPlayback, true);
+      });
+      if (audio.paused && !state.userHasManuallyPaused) {
+        try {
+          await audio.play();
+          state.audioError = '';
+          syncAudioUi();
+        } catch (playErr) {
+          console.warn('Playback on interaction failed:', playErr);
+        }
+      }
+    };
+
+    ['pointerdown', 'touchstart', 'mousedown', 'keydown', 'click'].forEach((event) => {
+      window.addEventListener(event, unlockPlayback, { once: true, capture: true, passive: true });
+    });
+  }
+}
+
 async function toggleMusic() {
   const audio = ensureAudio();
   if (!audio.paused) {
     audio.pause();
+    state.userHasManuallyPaused = true;
     setLocalValue('uti23MusicPlaying', false);
     return;
   }
 
   try {
+    state.userHasManuallyPaused = false;
     audio.volume = state.musicVolume;
     audio.muted = state.muted;
     await audio.play();
@@ -179,11 +219,13 @@ function initMusicControls() {
   }
 
   syncAudioUi();
+  tryAutoPlayMusic();
 }
 
 async function replayMusic() {
   const audio = ensureAudio();
   try {
+    state.userHasManuallyPaused = false;
     audio.currentTime = 0;
     audio.volume = state.musicVolume;
     audio.muted = state.muted;
@@ -385,6 +427,7 @@ async function initHomeScene() {
 }
 
 function cleanupCurrentPage() {
+  closeLightbox();
   if (editorialCollageCleanup) {
     editorialCollageCleanup();
     editorialCollageCleanup = null;
@@ -490,6 +533,7 @@ function initPage() {
   initMediaFallbacks();
   initHomeScene();
   initJarExperience();
+  initLightbox();
 }
 
 function initEditorialCollage() {
@@ -738,9 +782,371 @@ function initJarExperience() {
   setPhase('idle');
 }
 
+// ==========================================================================
+// PHOTO LIGHTBOX (3D INSTAGRAM-STYLE STACKED CARDS & SWIPE BOUNCE)
+// ==========================================================================
+
+const lightboxState = {
+  isOpen: false,
+  currentIndex: 0,
+  items: [],
+  container: null,
+  deck: null,
+  counterCurrent: null,
+  counterTotal: null,
+  isAnimating: false,
+};
+
+function ensureLightboxDom() {
+  if (lightboxState.container) return;
+
+  const overlay = document.createElement('div');
+  overlay.id = 'photo-lightbox';
+  overlay.className = 'lightbox-overlay';
+  overlay.setAttribute('aria-hidden', 'true');
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+  overlay.setAttribute('aria-label', 'Penampil Foto');
+
+  overlay.innerHTML = `
+    <div class="lightbox-backdrop" data-lightbox-close></div>
+    <div class="lightbox-header">
+      <div class="lightbox-counter" aria-live="polite">
+        <span class="lightbox-current-num">1</span>
+        <span>/</span>
+        <span class="lightbox-total-num">1</span>
+      </div>
+      <button type="button" class="lightbox-close-btn" aria-label="Tutup penampil foto" data-lightbox-close>
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+          <path d="M18 6 6 18M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <button type="button" class="lightbox-nav-btn lightbox-prev" aria-label="Foto sebelumnya">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M15 18l-6-6 6-6" />
+      </svg>
+    </button>
+    <div class="lightbox-stage">
+      <div class="lightbox-deck" id="lightbox-deck"></div>
+    </div>
+    <button type="button" class="lightbox-nav-btn lightbox-next" aria-label="Foto berikutnya">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M9 18l6-6-6-6" />
+      </svg>
+    </button>
+  `;
+
+  document.body.appendChild(overlay);
+
+  lightboxState.container = overlay;
+  lightboxState.deck = overlay.querySelector('#lightbox-deck');
+  lightboxState.counterCurrent = overlay.querySelector('.lightbox-current-num');
+  lightboxState.counterTotal = overlay.querySelector('.lightbox-total-num');
+
+  overlay.querySelectorAll('[data-lightbox-close]').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeLightbox();
+    });
+  });
+
+  overlay.querySelector('.lightbox-prev').addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (lightboxState.isAnimating) return;
+    triggerPrev();
+  });
+
+  overlay.querySelector('.lightbox-next').addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (lightboxState.isAnimating) return;
+    triggerNext();
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (!lightboxState.isOpen) return;
+    if (e.key === 'Escape') {
+      closeLightbox();
+    } else if (e.key === 'ArrowLeft') {
+      if (!lightboxState.isAnimating) triggerPrev();
+    } else if (e.key === 'ArrowRight') {
+      if (!lightboxState.isAnimating) triggerNext();
+    }
+  });
+}
+
+function openLightbox(index, items) {
+  ensureLightboxDom();
+  lightboxState.items = items;
+  lightboxState.currentIndex = index;
+  lightboxState.isOpen = true;
+  lightboxState.container.setAttribute('aria-hidden', 'false');
+  lightboxState.container.classList.add('is-active');
+  document.body.classList.add('lightbox-open');
+  renderLightboxDeck();
+}
+
+function closeLightbox() {
+  if (!lightboxState.isOpen) return;
+  lightboxState.isOpen = false;
+  if (lightboxState.container) {
+    lightboxState.container.setAttribute('aria-hidden', 'true');
+    lightboxState.container.classList.remove('is-active');
+  }
+  document.body.classList.remove('lightbox-open');
+  if (lightboxState.deck) {
+    lightboxState.deck.innerHTML = '';
+  }
+}
+
+function renderLightboxDeck() {
+  const { deck, items, currentIndex, counterCurrent, counterTotal } = lightboxState;
+  if (!deck || !items.length) return;
+
+  const total = items.length;
+  if (counterCurrent) counterCurrent.textContent = String(currentIndex + 1);
+  if (counterTotal) counterTotal.textContent = String(total);
+
+  deck.innerHTML = '';
+
+  const activeItem = items[currentIndex];
+  const nextItem1 = total > 1 ? items[(currentIndex + 1) % total] : null;
+  const nextItem2 = total > 2 ? items[(currentIndex + 2) % total] : null;
+  const prevItem1 = total > 1 ? items[(currentIndex - 1 + total) % total] : null;
+
+  const createCard = (item, roleClass) => {
+    const card = document.createElement('div');
+    card.className = `lightbox-card ${roleClass}`;
+    card.innerHTML = `
+      <div class="lightbox-media-wrap">
+        <img class="lightbox-thumb-img" src="${item.thumbSrc}" alt="${item.alt}" decoding="async">
+        <img class="lightbox-full-img" alt="${item.alt}" decoding="async">
+        <div class="lightbox-spinner" aria-hidden="true"></div>
+      </div>
+      ${item.caption ? `<div class="lightbox-card-caption">${item.caption}</div>` : ''}
+    `;
+    return card;
+  };
+
+  let cardPrev1 = null;
+  let cardNext2 = null;
+  let cardNext1 = null;
+  let cardActive = null;
+
+  if (prevItem1) {
+    cardPrev1 = createCard(prevItem1, 'is-prev-1');
+    deck.appendChild(cardPrev1);
+  }
+  if (nextItem2) {
+    cardNext2 = createCard(nextItem2, 'is-next-2');
+    deck.appendChild(cardNext2);
+  }
+  if (nextItem1) {
+    cardNext1 = createCard(nextItem1, 'is-next-1');
+    deck.appendChild(cardNext1);
+  }
+
+  cardActive = createCard(activeItem, 'is-active');
+  deck.appendChild(cardActive);
+
+  // Progressive high-res load for active card
+  const fullImg = cardActive.querySelector('.lightbox-full-img');
+  fullImg.src = activeItem.fullSrc;
+  if (fullImg.complete) {
+    fullImg.classList.add('is-loaded');
+  } else {
+    fullImg.onload = () => fullImg.classList.add('is-loaded');
+  }
+
+  // Preload next full image in background
+  if (nextItem1) {
+    const nextPreload = new Image();
+    nextPreload.src = nextItem1.fullSrc;
+  }
+
+  setupCardGestures(cardActive, cardNext1, cardPrev1);
+}
+
+function setupCardGestures(cardActive, cardNext1, cardPrev1) {
+  let isDragging = false;
+  let startX = 0;
+  let startY = 0;
+  let currentX = 0;
+  let currentY = 0;
+  let startTime = 0;
+
+  const onPointerDown = (e) => {
+    if (lightboxState.isAnimating) return;
+    if (e.button !== undefined && e.button !== 0) return;
+    isDragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    currentX = e.clientX;
+    currentY = e.clientY;
+    startTime = Date.now();
+
+    cardActive.style.transition = 'none';
+    if (cardNext1) cardNext1.style.transition = 'none';
+    if (cardPrev1) cardPrev1.style.transition = 'none';
+
+    window.addEventListener('pointermove', onPointerMove, { passive: false });
+    window.addEventListener('pointerup', onPointerUp);
+    window.addEventListener('pointercancel', onPointerUp);
+  };
+
+  const onPointerMove = (e) => {
+    if (!isDragging) return;
+    currentX = e.clientX;
+    currentY = e.clientY;
+    const dx = currentX - startX;
+    const dy = currentY - startY;
+
+    if (Math.abs(dx) > 5) {
+      if (e.cancelable) e.preventDefault();
+    }
+
+    cardActive.style.transform = `translate3d(${dx}px, ${dy * 0.22}px, 0) rotate(${dx * 0.045}deg)`;
+
+    if (dx < 0 && cardNext1) {
+      const p = Math.min(Math.abs(dx) / 180, 1);
+      const scale = 0.93 + 0.07 * p;
+      const tx = 16 * (1 - p);
+      const ty = 14 * (1 - p);
+      const rot = 2.5 * (1 - p);
+      const op = 0.68 + 0.32 * p;
+      cardNext1.style.transform = `translate3d(${tx}px, ${ty}px, -${35 * (1 - p)}px) scale(${scale}) rotate(${rot}deg)`;
+      cardNext1.style.opacity = String(op);
+    } else if (dx > 0 && cardPrev1) {
+      const p = Math.min(dx / 180, 1);
+      const scale = 0.93 + 0.07 * p;
+      const tx = -18 * (1 - p) + (dx * 0.35);
+      const rot = -2.5 * (1 - p);
+      const op = 0.7 * p;
+      cardPrev1.style.transform = `translate3d(${tx}px, 14px, -35px) scale(${scale}) rotate(${rot}deg)`;
+      cardPrev1.style.opacity = String(op);
+    }
+  };
+
+  const onPointerUp = () => {
+    if (!isDragging) return;
+    isDragging = false;
+    window.removeEventListener('pointermove', onPointerMove);
+    window.removeEventListener('pointerup', onPointerUp);
+    window.removeEventListener('pointercancel', onPointerUp);
+
+    const dx = currentX - startX;
+    const dt = Date.now() - startTime;
+    const vx = dx / (dt || 1);
+
+    const threshold = 65;
+    const isSwipeNext = dx < -threshold || (dx < -25 && vx < -0.35);
+    const isSwipePrev = dx > threshold || (dx > 25 && vx > 0.35);
+
+    if (isSwipeNext && lightboxState.items.length > 1) {
+      executeNextAnimation(cardActive, cardNext1);
+    } else if (isSwipePrev && lightboxState.items.length > 1) {
+      executePrevAnimation(cardActive, cardPrev1);
+    } else {
+      // Elastic spring bounce back to center!
+      cardActive.style.transition = 'transform 0.48s cubic-bezier(0.34, 1.56, 0.64, 1)';
+      cardActive.style.transform = 'translate3d(0, 0, 0) scale(1) rotate(0deg)';
+      if (cardNext1) {
+        cardNext1.style.transition = 'transform 0.48s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease';
+        cardNext1.style.transform = 'translate3d(16px, 14px, -35px) scale(0.93) rotate(2.5deg)';
+        cardNext1.style.opacity = '0.68';
+      }
+      if (cardPrev1) {
+        cardPrev1.style.transition = 'transform 0.35s ease, opacity 0.3s ease';
+        cardPrev1.style.transform = 'translate3d(-18px, 14px, -35px) scale(0.93) rotate(-2.5deg)';
+        cardPrev1.style.opacity = '0';
+      }
+    }
+  };
+
+  cardActive.addEventListener('pointerdown', onPointerDown);
+}
+
+function executeNextAnimation(activeEl, nextEl) {
+  lightboxState.isAnimating = true;
+  activeEl.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.4, 1), opacity 0.35s ease';
+  activeEl.style.transform = 'translate3d(-130vw, 20px, 0) rotate(-22deg)';
+  activeEl.style.opacity = '0';
+
+  if (nextEl) {
+    nextEl.style.transition = 'transform 0.52s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease';
+    nextEl.style.transform = 'translate3d(0, 0, 0) scale(1) rotate(0deg)';
+    nextEl.style.opacity = '1';
+  }
+
+  window.setTimeout(() => {
+    lightboxState.currentIndex = (lightboxState.currentIndex + 1) % lightboxState.items.length;
+    renderLightboxDeck();
+    lightboxState.isAnimating = false;
+  }, 380);
+}
+
+function executePrevAnimation(activeEl, prevEl) {
+  lightboxState.isAnimating = true;
+  activeEl.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.4, 1), opacity 0.35s ease';
+  activeEl.style.transform = 'translate3d(130vw, 20px, 0) rotate(22deg)';
+  activeEl.style.opacity = '0';
+
+  if (prevEl) {
+    prevEl.style.transition = 'transform 0.52s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease';
+    prevEl.style.transform = 'translate3d(0, 0, 0) scale(1) rotate(0deg)';
+    prevEl.style.opacity = '1';
+  }
+
+  window.setTimeout(() => {
+    lightboxState.currentIndex = (lightboxState.currentIndex - 1 + lightboxState.items.length) % lightboxState.items.length;
+    renderLightboxDeck();
+    lightboxState.isAnimating = false;
+  }, 380);
+}
+
+function triggerNext() {
+  const activeEl = lightboxState.deck?.querySelector('.lightbox-card.is-active');
+  const nextEl = lightboxState.deck?.querySelector('.lightbox-card.is-next-1');
+  if (activeEl) {
+    executeNextAnimation(activeEl, nextEl);
+  }
+}
+
+function triggerPrev() {
+  const activeEl = lightboxState.deck?.querySelector('.lightbox-card.is-active');
+  const prevEl = lightboxState.deck?.querySelector('.lightbox-card.is-prev-1');
+  if (activeEl) {
+    executePrevAnimation(activeEl, prevEl);
+  }
+}
+
+function initLightbox() {
+  const cards = document.querySelectorAll('[data-lightbox]');
+  if (!cards.length) return;
+
+  const items = Array.from(cards).map((card) => {
+    const img = card.querySelector('img');
+    const captionEl = card.querySelector('figcaption');
+    return {
+      fullSrc: card.dataset.fullSrc || img?.src || '',
+      thumbSrc: img?.src || '',
+      alt: img?.alt || '',
+      caption: captionEl ? captionEl.textContent.trim() : ''
+    };
+  });
+
+  cards.forEach((card, idx) => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return;
+      openLightbox(idx, items);
+    });
+  });
+}
+
 function init() {
   initNavigation();
   initPage();
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
