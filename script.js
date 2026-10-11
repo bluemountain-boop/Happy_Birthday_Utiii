@@ -899,6 +899,83 @@ function closeLightbox() {
   }
 }
 
+const loadedFullImages = new Set();
+
+function loadHighResImage(card, fullSrc) {
+  const fullImg = card.querySelector('.lightbox-full-img');
+  const loader = card.querySelector('.uiverse-turtle-loader');
+  const errorOverlay = card.querySelector('.lightbox-error-overlay');
+  const retryBtn = card.querySelector('.lightbox-retry-btn');
+  if (!fullImg || !loader) return;
+
+  // If already loaded in current session, display instantly without loader or flicker
+  if (loadedFullImages.has(fullSrc)) {
+    fullImg.src = fullSrc;
+    fullImg.classList.add('is-loaded');
+    loader.classList.remove('is-loading');
+    if (errorOverlay) errorOverlay.hidden = true;
+    return;
+  }
+
+  let showTimer = null;
+  let isDone = false;
+
+  const hideLoader = () => {
+    if (showTimer) {
+      clearTimeout(showTimer);
+      showTimer = null;
+    }
+    loader.classList.remove('is-loading');
+  };
+
+  const startLoading = (targetUrl) => {
+    isDone = false;
+    if (errorOverlay) errorOverlay.hidden = true;
+    fullImg.classList.remove('is-loaded');
+
+    // Debounce showing loader by 90ms so fast/cached loads never flash the loader
+    showTimer = setTimeout(() => {
+      if (!isDone) {
+        loader.classList.add('is-loading');
+      }
+    }, 90);
+
+    const testImg = new Image();
+    testImg.decoding = 'async';
+
+    testImg.onload = () => {
+      isDone = true;
+      hideLoader();
+      loadedFullImages.add(fullSrc);
+      fullImg.src = targetUrl;
+      requestAnimationFrame(() => {
+        fullImg.classList.add('is-loaded');
+      });
+    };
+
+    testImg.onerror = () => {
+      isDone = true;
+      hideLoader();
+      fullImg.classList.remove('is-loaded');
+      if (errorOverlay) errorOverlay.hidden = false;
+    };
+
+    testImg.src = targetUrl;
+  };
+
+  if (retryBtn) {
+    retryBtn.onclick = (e) => {
+      e.stopPropagation();
+      const retryUrl = fullSrc.includes('?')
+        ? `${fullSrc}&retry=${Date.now()}`
+        : `${fullSrc}?retry=${Date.now()}`;
+      startLoading(retryUrl);
+    };
+  }
+
+  startLoading(fullSrc);
+}
+
 function renderLightboxDeck() {
   const { deck, items, currentIndex, counterCurrent, counterTotal } = lightboxState;
   if (!deck || !items.length) return;
@@ -921,7 +998,33 @@ function renderLightboxDeck() {
       <div class="lightbox-media-wrap">
         <img class="lightbox-thumb-img" src="${item.thumbSrc}" alt="${item.alt}" decoding="async">
         <img class="lightbox-full-img" alt="${item.alt}" decoding="async">
-        <div class="lightbox-spinner" aria-hidden="true"></div>
+        <div class="uiverse-turtle-loader" role="status" aria-label="Memuat gambar resolusi tinggi...">
+          <div class="turtle-loader-wrapper">
+            <div class="turtle-circle"></div>
+            <div class="turtle-circle"></div>
+            <div class="turtle-circle"></div>
+            <div class="turtle-shadow"></div>
+            <div class="turtle-shadow"></div>
+            <div class="turtle-shadow"></div>
+          </div>
+        </div>
+        <div class="lightbox-error-overlay" hidden aria-live="polite">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <p class="lightbox-error-text">Gambar resolusi penuh gagal dimuat.</p>
+          <button type="button" class="lightbox-retry-btn">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+              <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+              <path d="M16 21h5v-5"/>
+            </svg>
+            Coba Muat Ulang
+          </button>
+        </div>
       </div>
       ${item.caption ? `<div class="lightbox-card-caption">${item.caption}</div>` : ''}
     `;
@@ -949,18 +1052,14 @@ function renderLightboxDeck() {
   cardActive = createCard(activeItem, 'is-active');
   deck.appendChild(cardActive);
 
-  // Progressive high-res load for active card
-  const fullImg = cardActive.querySelector('.lightbox-full-img');
-  fullImg.src = activeItem.fullSrc;
-  if (fullImg.complete) {
-    fullImg.classList.add('is-loaded');
-  } else {
-    fullImg.onload = () => fullImg.classList.add('is-loaded');
-  }
+  // Progressive high-res load with Uiverse loader, debounced flicker protection, and error retry
+  loadHighResImage(cardActive, activeItem.fullSrc);
 
-  // Preload next full image in background
-  if (nextItem1) {
+  // Preload next full image in background if not already cached
+  if (nextItem1 && !loadedFullImages.has(nextItem1.fullSrc)) {
     const nextPreload = new Image();
+    nextPreload.decoding = 'async';
+    nextPreload.onload = () => loadedFullImages.add(nextItem1.fullSrc);
     nextPreload.src = nextItem1.fullSrc;
   }
 
