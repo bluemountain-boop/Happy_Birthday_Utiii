@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+  <title>Surat untuk Uti | UTI 23</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body data-page="letter">
+  <div class="page-shell inner-page">
+    <header class="topbar">
+      <a class="brand" href="./index.html">
+        <span class="brand-mark">U</span>
+        <span class="brand-text">UTI 23</span>
+      </a>
+      <nav class="main-nav" aria-label="Navigasi utama">
+        <a href="./index.html">Beranda</a>
+        <a href="./memories.html">Kenangan</a>
+        <a href="./jar.html">Toples</a>
+        <a href="./letter.html" class="active" aria-current="page">Surat</a>
+        <a href="./finale.html">Penutup</a>
+      </nav>
+      <div class="audio-panel" role="group" aria-label="Kontrol musik">
+        <button class="audio-toggle" type="button" data-audio-toggle aria-label="Putar musik" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 7.5v9l9 4.5V3L7 7.5Z" fill="currentColor" />
+          </svg>
+        </button>
+        <button class="mute-toggle" type="button" data-mute-toggle aria-label="Bisukan musik" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 6v12a4 4 0 0 1-4-4H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h3a4 4 0 0 1 4-4Zm6.5 5.5 2.5 2.5-2.5 2.5M17 12h2.5"
+              fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" />
+          </svg>
+        </button>
+        <input class="volume-slider" type="range" min="0" max="100" value="70" aria-label="Volume musik" />
+        <span class="audio-status" role="status" aria-live="polite">Musik dijeda · tekan Putar untuk memulai</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero letter-hero narrow">
+        <p class="kicker">Sepucuk surat untuk Uti</p>
+        <h1>Untuk Uti, di usia yang baru.</h1>
+      </section>
+
+      <article class="letter-body" lang="id">
+        <p>Uti,</p>
+        <p>
+          Selamat ulang tahun yang ke-23. Semoga usia baru ini membawa lebih banyak hari yang terasa tenang, pilihan
+          yang semakin dekat dengan apa yang kamu butuhkan, dan ruang untuk menjalani hidup dengan caramu sendiri.
+        </p>
+        <p>
+          Kamu tidak harus selalu tahu jawaban atau bergerak secepat siapa pun. Ada kalanya tumbuh berarti berhenti
+          sebentar, mendengarkan diri sendiri, lalu melangkah lagi saat kamu siap. Semoga kamu selalu merasa boleh
+          melakukan itu—termasuk saat perlu beristirahat atau menetapkan batas.
+        </p>
+        <p>
+          Semoga tahun ini juga dipenuhi hal-hal sederhana yang membuat harimu terasa baik: waktu yang menenangkan,
+          orang-orang yang nyaman diajak berbagi, dan momen kecil yang mengingatkanmu bahwa kamu tidak perlu membuktikan
+          apa pun untuk pantas merasa bahagia.
+        </p>
+        <p>
+          Aku berharap kamu terus menemukan keberanian untuk melepaskan yang terasa berat dan memilih hal-hal yang baik
+          untukmu. Tidak perlu terburu-buru. Kamu boleh berubah pikiran, belajar sepanjang jalan, dan tumbuh dengan
+          kecepatanmu sendiri.
+        </p>
+        <p>
+          Terima kasih sudah menjadi dirimu, Uti—dengan caramu memperhatikan hal-hal kecil dan kehangatan yang kamu
+          bawa. Semoga kamu bisa melihat dirimu dengan kelembutan yang sama, bahkan pada hari-hari ketika semuanya belum
+          terasa mudah.
+        </p>
+        <p>
+          Selamat ulang tahun. Semoga tahun ini terasa lebih lapang, lebih jujur pada dirimu, dan menyimpan banyak
+          alasan kecil untuk tersenyum.
+        </p>
+        <p class="letter-signoff">Dengan hangat,<br /><strong>Arthur &amp; Reree🤍</strong></p>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <p>Semoga tahun ini terasa baik dan penuh kemungkinan.</p>
+    </footer>
+  </div>
+
+  <script type="module" src="./script.js"></script>
+</body>
+
+</html>

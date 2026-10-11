@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+  <title>Ucapan Penutup | UTI 23
+  </title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body data-page="finale">
+  <div class="page-shell inner-page">
+    <header class="topbar">
+      <a class="brand" href="./index.html">
+        <span class="brand-mark">U</span>
+        <span class="brand-text">UTI 23</span>
+      </a>
+      <nav class="main-nav" aria-label="Navigasi utama">
+        <a href="./index.html">Beranda</a>
+        <a href="./memories.html">Kenangan</a>
+        <a href="./jar.html">Toples</a>
+        <a href="./letter.html">Surat</a>
+        <a href="./finale.html" class="active" aria-current="page">Penutup</a>
+      </nav>
+      <div class="audio-panel" role="group" aria-label="Kontrol musik">
+        <button class="audio-toggle" type="button" data-audio-toggle aria-label="Putar musik" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 7.5v9l9 4.5V3L7 7.5Z" fill="currentColor" />
+          </svg>
+        </button>
+        <button class="mute-toggle" type="button" data-mute-toggle aria-label="Bisukan musik" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 6v12a4 4 0 0 1-4-4H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h3a4 4 0 0 1 4-4Zm6.5 5.5 2.5 2.5-2.5 2.5M17 12h2.5"
+              fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" />
+          </svg>
+        </button>
+        <input class="volume-slider" type="range" min="0" max="100" value="70" aria-label="Volume musik" />
+        <span class="audio-status" role="status" aria-live="polite">Musik dijeda · tekan Putar untuk memulai</span>
+      </div>
+    </header>
+
+    <main class="finale-page">
+      <section class="page-hero narrow center">
+        <p class="kicker">Bab penutup — 23</p>
+        <h1>Selamat ulang tahun, Uti.</h1>
+      </section>
+
+      <section class="finale-video">
+        <video controls preload="metadata" poster="./src/img/Foto Uti/Uti 1.webp">
+          <source src="./src/vid/Video kenangan kita/v1c044g50000davur4vog65slf40i9kg.mp4" type="video/mp4" />
+          Peramban ini tidak mendukung pemutaran video.
+        </video>
+      </section>
+
+      <section class="finale-message">
+        <p class="kicker">Pesan terakhir</p>
+        <h2>Semoga tahun ini menjadi awal yang lapang.</h2>
+        <p>
+          Semoga tahun ini membawa lebih banyak ruang untuk bahagia, lebih banyak kejelasan untuk pilihan yang sehat,
+          dan lebih banyak momen yang mengingatkanmu bahwa kamu pantas menyukai hidupmu sendiri.
+        </p>
+        <div class="button-row">
+          <button class="primary-button" type="button" data-replay-music>Putar ulang musik</button>
+          <a class="secondary-button" href="./memories.html">Lihat kenangan lagi</a>
+          <a class="secondary-button" href="./index.html">Kembali ke beranda</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Untuk lebih banyak pagi yang tenang, bahagia yang berani, dan hidup yang terasa milikmu.</p>
+    </footer>
+  </div>
+
+  <script type="module" src="./script.js"></script>
+</body>
+
+</html>

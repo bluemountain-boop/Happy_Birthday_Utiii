@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+  <title>Toples Pengingat Kecil | UTI 23</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body data-page="jar">
+  <div class="page-shell inner-page">
+    <header class="topbar">
+      <a class="brand" href="./index.html" aria-label="Beranda UTI 23">
+        <span class="brand-mark">U</span>
+        <span class="brand-text">UTI 23</span>
+      </a>
+      <nav class="main-nav" aria-label="Navigasi utama">
+        <a href="./index.html">Beranda</a>
+        <a href="./memories.html">Kenangan</a>
+        <a href="./jar.html" class="active" aria-current="page">Toples</a>
+        <a href="./letter.html">Surat</a>
+        <a href="./finale.html">Penutup</a>
+      </nav>
+      <div class="audio-panel" role="group" aria-label="Kontrol musik">
+        <button class="audio-toggle" type="button" data-audio-toggle aria-label="Putar musik" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 7.5v9l9 4.5V3L7 7.5Z" fill="currentColor" />
+          </svg>
+        </button>
+        <button class="mute-toggle" type="button" data-mute-toggle aria-label="Bisukan musik" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 6v12a4 4 0 0 1-4-4H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h3a4 4 0 0 1 4-4Zm6.5 5.5 2.5 2.5-2.5 2.5M17 12h2.5"
+              fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" />
+          </svg>
+        </button>
+        <input class="volume-slider" type="range" min="0" max="100" value="70" aria-label="Volume musik" />
+        <span class="audio-status" role="status" aria-live="polite">Musik dijeda · tekan Putar untuk memulai</span>
+      </div>
+    </header>
+
+    <main class="jar-page">
+      <section class="jar-heading">
+        <div>
+          <p class="kicker">Saku kecil berisi kata baik · 01—30</p>
+          <h1>Untuk hari<br />saat kamu perlu <span>sedikit terang.</span></h1>
+        </div>
+        <p class="jar-intro">Catatan kecil untuk Uti, kapan pun hidup memintamu berhenti sejenak, menarik napas, dan
+          mengingat kembali kebaikan yang sudah ada dalam dirimu.</p>
+      </section>
+
+      <section class="jar-layout" aria-label="Toples berisi pesan-pesan kecil">
+        <div class="jar-scene">
+          <div class="jar-shadow" aria-hidden="true"></div>
+          <div class="jar-lid" aria-hidden="true"><span></span></div>
+          <div class="jar-glass" aria-label="Toples kaca berisi gulungan pesan">
+            <div class="jar-glint" aria-hidden="true"></div>
+            <div id="paper-rolls" class="paper-rolls" aria-hidden="true"></div>
+            <div class="jar-label" aria-hidden="true">pesan kecil<br />untuk Uti</div>
+          </div>
+          <div class="jar-foot" aria-hidden="true"></div>
+          <button id="picked-note" class="picked-note" type="button" aria-label="Buka gulungan pesan pilihanmu" hidden>
+            <span class="picked-note-roll"><i></i></span>
+            <span class="picked-note-copy">Ketuk untuk membuka</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m9 18 6-6-6-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" />
+            </svg>
+          </button>
+          <p class="jar-status" id="jar-status" aria-live="polite">Menyiapkan 30 pesan kecil…</p>
+        </div>
+
+        <div class="jar-panel">
+          <div class="note-card" id="note-card">
+            <div class="note-card-top">
+              <span class="note-label">Pesan untuk hari ini</span>
+              <span class="note-number" id="note-number">— / 30</span>
+            </div>
+            <p id="note-text" lang="id" aria-live="polite">Kocok toplesnya, pilih satu gulungan pesan, lalu biarkan kata-katanya menemukanmu di waktu yang tepat.</p>
+            <span class="note-category" id="note-category">Pengingat lembut</span>
+          </div>
+          <p class="jar-instruction" id="jar-instruction">Mulai dengan menggoyangkan toples. Pilih pesan setelah gulungannya berhenti bergerak.</p>
+          <div class="jar-actions" aria-label="Tombol toples">
+            <button id="shake-button" class="primary-button" type="button" disabled>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 4h3l4 16h3M5 8h4m6 8h5M16 4l3 3-3 3M8 17l-3 3" fill="none" stroke="currentColor"
+                  stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" />
+              </svg>
+              Kocok toples
+            </button>
+            <button id="pick-button" class="secondary-button" type="button" disabled>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10Z" fill="none"
+                  stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" />
+              </svg>
+              Ambil satu pesan
+            </button>
+            <button id="next-button" class="secondary-button next-note hidden" type="button">
+              Ambil pesan lain
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-linecap="round"
+                  stroke-linejoin="round" stroke-width="1.8" />
+              </svg>
+            </button>
+          </div>
+          <p class="jar-count"><span id="notes-remaining">30</span> pesan kecil, diambil satu per satu.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Satu pesan kecil, satu pengingat lembut pada satu waktu.</p>
+    </footer>
+  </div>
+
+  <script type="module" src="./script.js"
+    onerror="document.getElementById('jar-status').textContent = 'Toples pesan tidak dapat dimuat. Muat ulang halaman untuk mencoba lagi.'; document.querySelectorAll('.jar-actions button, .picked-note').forEach((button) => { button.disabled = true; });"></script>
+</body>
+
+</html>

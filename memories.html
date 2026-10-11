@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+  <title>Album Kenangan | UTI 23</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body data-page="memories">
+  <div class="page-shell inner-page">
+    <header class="topbar">
+      <a class="brand" href="./index.html">
+        <span class="brand-mark">U</span>
+        <span class="brand-text">UTI 23</span>
+      </a>
+      <nav class="main-nav" aria-label="Navigasi utama">
+        <a href="./index.html">Beranda</a>
+        <a href="./memories.html" class="active" aria-current="page">Kenangan</a>
+        <a href="./jar.html">Toples</a>
+        <a href="./letter.html">Surat</a>
+        <a href="./finale.html">Penutup</a>
+      </nav>
+      <div class="audio-panel" role="group" aria-label="Kontrol musik">
+        <button class="audio-toggle" type="button" data-audio-toggle aria-label="Putar musik" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 7.5v9l9 4.5V3L7 7.5Z" fill="currentColor" />
+          </svg>
+        </button>
+        <button class="mute-toggle" type="button" data-mute-toggle aria-label="Bisukan musik" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 6v12a4 4 0 0 1-4-4H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h3a4 4 0 0 1 4-4Zm6.5 5.5 2.5 2.5-2.5 2.5M17 12h2.5"
+              fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" />
+          </svg>
+        </button>
+        <input class="volume-slider" type="range" min="0" max="100" value="70" aria-label="Volume musik" />
+        <span class="audio-status" role="status" aria-live="polite">Musik dijeda · tekan Putar untuk memulai</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero narrow">
+        <p class="kicker">Album Kenangan</p>
+        <h1>Potongan kecil, arti yang besar.</h1>
+      </section>
+
+      <div class="memories-stage">
+        <section class="memory-gallery" aria-label="Kumpulan foto kenangan">
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/Artboard1.png" alt="Kolase dua foto tiga orang membuat ekspresi jenaka" loading="lazy" decoding="async" />
+          <figcaption>Dua panel, satu stok ekspresi yang tidak habis-habis.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/Gemini_Generated_Image_vk4bv0vk4bv0vk4b.jpg" alt="Tiga orang berpose di luar ruangan pada malam hari" loading="lazy" decoding="async" />
+          <figcaption>Tiga siluet, satu lampu malam yang ikut jadi sorotan.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/IMG_4495.JPG" alt="Swafoto tiga orang di luar ruangan" loading="lazy" decoding="async" />
+          <figcaption>Wajah-wajah mendekat, latar hijau mengintip di belakang.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/IMG_5019.png" alt="Dua orang berpose di depan cermin" loading="lazy" decoding="async" />
+          <figcaption>Cermin penuh, masing-masing membawa gayanya sendiri.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/IMG_5020.png" alt="Dua orang berfoto di cermin dengan pose santai" loading="lazy" decoding="async" />
+          <figcaption>Sedikit beda pose, pantulannya langsung punya cerita baru.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/IMG_5021.png" alt="Dua orang berpose bersama di depan cermin" loading="lazy" decoding="async" />
+          <figcaption>Berdua di depan cermin, tanpa perlu banyak arahan.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/IMG_5022.png" alt="Swafoto di cermin dengan satu tangan terangkat" loading="lazy" decoding="async" />
+          <figcaption>Satu tangan terangkat, pose cermin jadi lebih hidup.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/IMG_5046.png" alt="Swafoto dekat dua orang dengan ekspresi santai" loading="lazy" decoding="async" />
+          <figcaption>Kamera dekat sekali; ekspresinya tetap santai.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/IMG_5097.png" alt="Potret penuh dua orang di depan cermin" loading="lazy" decoding="async" />
+          <figcaption>Potret utuh yang bersembunyi di dalam pantulan.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/IMG_5102.png" alt="Potret berdua di depan cermin" loading="lazy" decoding="async" />
+          <figcaption>Pose cermin favorit, dibingkai dari kepala sampai kaki.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/IMG_5179.png" alt="Tiga orang muncul dalam satu swafoto" loading="lazy" decoding="async" />
+          <figcaption>Tiga orang berbagi ruang dalam satu swafoto rapat.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/IMG_5183.png" alt="Dua orang berpose bersama dengan ekspresi ceria" loading="lazy" decoding="async" />
+          <figcaption>Satu kamera, beberapa ekspresi yang tertangkap sekaligus.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/IMG_5184.png" alt="Dua orang berdekatan dalam swafoto" loading="lazy" decoding="async" />
+          <figcaption>Swafoto rapat yang terasa seperti sedang menyapa.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/IMG_5185.png" alt="Dua orang berpose berdampingan untuk swafoto" loading="lazy" decoding="async" />
+          <figcaption>Berdampingan tanpa banyak gaya, tetap enak dilihat.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/IMG_5186.png" alt="Dua orang membuat pose santai di depan kamera" loading="lazy" decoding="async" />
+          <figcaption>Ekspresi santai, jarak yang terasa akrab.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/IMG_5187.png" alt="Dua orang tersenyum bersama dalam swafoto" loading="lazy" decoding="async" />
+          <figcaption>Dua senyum bertemu tepat sebelum kamera berbunyi.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/IMG_5190.png" alt="Dua orang berpose bersama di dalam ruangan" loading="lazy" decoding="async" />
+          <figcaption>Dua orang duduk berdekatan, senyum muncul bersamaan.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/IMG_5191.png" alt="Dua orang mengambil foto bersama di dalam ruangan" loading="lazy" decoding="async" />
+          <figcaption>Potret berdua yang terasa ringan dan tidak dibuat-buat.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/IMG_5193.png" alt="Dua orang membuat gestur tangan saat berfoto" loading="lazy" decoding="async" />
+          <figcaption>Gestur tangan kecil, ekspresi langsung mengambil alih.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/IMG_5224.png" alt="Swafoto dekat dua orang dari sudut samping" loading="lazy" decoding="async" />
+          <figcaption>Sudutnya dekat; dua wajah memenuhi layar.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/IMG_5227.png" alt="Dua orang berfoto berdekatan" loading="lazy" decoding="async" />
+          <figcaption>Satu jepretan cepat, dua wajah tetap masuk semua.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/temp_image_181BC110-F1BF-41EF-928C-52F37DCF2E34png.png" alt="Dua orang berpose bersama di depan cermin" loading="lazy" decoding="async" />
+          <figcaption>Ekspresi lepas berdua, tanpa latar yang ramai.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/WhatsApp Image 2026-09-02 at 22.14.11.jpeg" alt="Swafoto dua orang dengan hamparan hijau di sekelilingnya" loading="lazy" decoding="async" />
+          <figcaption>Senyum di depan hamparan hijau yang memenuhi latar.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/WhatsApp Image 2026-09-05 at 10.22.45.jpeg" alt="Dua orang berpotret di luar ruangan" loading="lazy" decoding="async" />
+          <figcaption>Potret berdua dengan ruang terbuka di sekelilingnya.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/WhatsApp Image 2026-09-11 at 21.17.59.jpeg" alt="Tiga orang berpose rapat untuk swafoto" loading="lazy" decoding="async" />
+          <figcaption>Tiga orang merapat; tidak ada yang tertinggal dari swafoto.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto kenangan kita/WhatsApp Image 2026-09-13 at 00.37.36 (1).jpeg" alt="Dua orang berpose bersama di luar ruangan" loading="lazy" decoding="async" />
+          <figcaption>Dua pose santai di depan latar yang lapang.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto Uti/00000046-PHOTO-2026-09-14-14-17-27.jpg" alt="Potret Uti dengan efek dekoratif pada layar" loading="lazy" decoding="async" />
+          <figcaption>Potret Uti ditemani hiasan kecil dari layar.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto Uti/00000210-PHOTO-2026-09-15-07-59-54.jpg" alt="Potret Uti mengenakan kerudung terang" loading="lazy" decoding="async" />
+          <figcaption>Kerudung terang, senyum tenang, bingkai yang sederhana.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto Uti/Desain tanpa judul.png" alt="Potret Uti berlatar putih polos" loading="lazy" decoding="async" />
+          <figcaption>Potret rapi Uti dengan latar putih yang bersih.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto Uti/IMG_3865.png" alt="Tiga orang berpose sambil memegang buku" loading="lazy" decoding="async" />
+          <figcaption>Buku ikut terangkat; senyum bertiga ikut tertangkap.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto Uti/IMG_4772.png" alt="Potret Uti dengan sebuah benda di tangannya" loading="lazy" decoding="async" />
+          <figcaption>Pose santai Uti, dengan semangkuk camilan di dekatnya.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto Uti/Screenshot 2026-10-09 210847.png" alt="Kolase beberapa potret Uti dengan latar biru" loading="lazy" decoding="async" />
+          <figcaption>Kolase beberapa pose Uti dalam satu bingkai tinggi.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto Uti/Screenshot 2026-10-09 210909.png" alt="Kolase beberapa potret Uti di dekat air terjun" loading="lazy" decoding="async" />
+          <figcaption>Kolase potret di antara aliran air dan bebatuan.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto Uti/Screenshot 2026-10-09 210940.png" alt="Kolase potret Uti di antara aliran air" loading="lazy" decoding="async" />
+          <figcaption>Beberapa potret Uti tersusun dalam satu kolase.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto Uti/Uti 1.webp" alt="Potret Uti tersenyum mengenakan kerudung merah marun" loading="lazy" decoding="async" />
+          <figcaption>Merah marun dan senyum yang langsung mencuri perhatian.</figcaption>
+        </figure>
+        <figure class="memory-card">
+          <img src="./src/img/Foto Uti/WhatsApp Image 2026-09-13 at 00.37.35 (1).jpeg" alt="Uti berpose sambil menggendong seekor kucing" loading="lazy" decoding="async" />
+          <figcaption>Uti menggendong kucing; dua-duanya berhasil masuk bingkai.</figcaption>
+        </figure>
+        </section>
+        <div class="sticker-layer memories-stickers" aria-hidden="true">
+          <img class="scrapbook-sticker sticker-wave" src="./src/Stiker/7.png" alt="" loading="lazy" />
+          <img class="scrapbook-sticker sticker-smile" src="./src/Stiker/8.png" alt="" loading="lazy" />
+          <img class="scrapbook-sticker sticker-hat" src="./src/Stiker/4.png" alt="" loading="lazy" />
+        </div>
+      </div>
+
+      <section class="video-strip">
+        <div class="video-copy">
+          <p class="kicker">Potongan yang bergerak</p>
+          <h2>Momen yang kembali hidup.</h2>
+        </div>
+        <p class="video-caption">Enam klip pendek, lengkap dengan cuplikan asli dari masing-masing video.</p>
+        <div class="video-gallery">
+          <figure class="video-card">
+            <video controls playsinline preload="metadata" poster="./src/vid/posters/kenangan-01.jpg" aria-label="Video pendek tiga orang berdiri bersama">
+              <source src="./src/vid/Video kenangan kita/v1c044g50000davur4vog65slf40i9kg.mp4" type="video/mp4" />
+              Peramban ini tidak mendukung pemutaran video.
+            </video>
+            <figcaption>Tiga orang berhenti sejenak di depan kamera.</figcaption>
+          </figure>
+          <figure class="video-card">
+            <video controls playsinline preload="metadata" poster="./src/vid/posters/kenangan-02.jpg" aria-label="Video pendek tiga orang berpose bergantian">
+              <source src="./src/vid/Video kenangan kita/v1c044g50000davurfnog65glneof9ng.mp4" type="video/mp4" />
+              Peramban ini tidak mendukung pemutaran video.
+            </video>
+            <figcaption>Pose berubah, tiga wajah tetap bergantian mengisi layar.</figcaption>
+          </figure>
+          <figure class="video-card">
+            <video controls playsinline preload="metadata" poster="./src/vid/posters/kenangan-03.jpg" aria-label="Video pendek Uti berdiri di dalam ruangan">
+              <source src="./src/vid/Video kenangan kita/v1c044g50000davurmvog65prkoago6g.mp4" type="video/mp4" />
+              Peramban ini tidak mendukung pemutaran video.
+            </video>
+            <figcaption>Satu potret bergerak, dengan ruang yang lapang di sekelilingnya.</figcaption>
+          </figure>
+          <figure class="video-card">
+            <video controls playsinline preload="metadata" poster="./src/vid/posters/kenangan-04.jpg" aria-label="Video pendek tiga orang berdiri berdampingan">
+              <source src="./src/vid/Video kenangan kita/v1c044g50000davus7vog65ouu9d30k0.mp4" type="video/mp4" />
+              Peramban ini tidak mendukung pemutaran video.
+            </video>
+            <figcaption>Tiga orang kembali berkumpul di dalam satu bingkai.</figcaption>
+          </figure>
+          <figure class="video-card">
+            <video controls playsinline preload="metadata" poster="./src/vid/posters/kenangan-05.jpg" aria-label="Video pendek tiga orang bergaya santai">
+              <source src="./src/vid/Video kenangan kita/v1c044g50000davusbvog65gq9g7shj0.mp4" type="video/mp4" />
+              Peramban ini tidak mendukung pemutaran video.
+            </video>
+            <figcaption>Gaya santai dan satu pose kecil yang berubah di tengah video.</figcaption>
+          </figure>
+          <figure class="video-card">
+            <video controls playsinline preload="metadata" poster="./src/vid/posters/uti.jpg" aria-label="Video Uti duduk di meja sambil memegang gelas">
+              <source src="./src/vid/Video uti/WhatsApp Video 2026-09-19 at 23.32.30.mp4" type="video/mp4" />
+              Peramban ini tidak mendukung pemutaran video.
+            </video>
+            <figcaption>Uti menikmati minuman di tengah suasana malam yang hangat.</figcaption>
+          </figure>
+        </div>
+      </section>
+      <a class="gallery-link memories-more" href="./index.html">Kembali ke beranda <span aria-hidden="true">→</span></a>
+    </main>
+
+    <footer class="site-footer">
+      <p>Beberapa kenangan selalu menemukan jalan untuk tinggal.</p>
+    </footer>
+  </div>
+
+  <script type="module" src="./script.js"></script>
+</body>
+
+</html>

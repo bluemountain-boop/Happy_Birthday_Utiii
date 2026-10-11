@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+  <title>UTI 23 | Dunia Kecil untuk Uti</title>
+  <meta name="description"
+    content="Dunia ulang tahun untuk Uti: kenangan, pesan kecil, musik, dan ruang istimewa yang dibuat untukmu." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body data-page="home">
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="./index.html" aria-label="Beranda UTI 23">
+        <span class="brand-mark">U</span>
+        <span class="brand-text">UTI 23</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Navigasi utama">
+        <a href="./index.html" class="active" aria-current="page">Beranda</a>
+        <a href="./memories.html">Kenangan</a>
+        <a href="./jar.html">Toples</a>
+        <a href="./letter.html">Surat</a>
+        <a href="./finale.html">Penutup</a>
+      </nav>
+
+      <div class="audio-panel" role="group" aria-label="Kontrol musik">
+        <button class="audio-toggle" type="button" data-audio-toggle aria-label="Putar musik" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 7.5v9l9 4.5V3L7 7.5Z" fill="currentColor" />
+          </svg>
+        </button>
+        <button class="mute-toggle" type="button" data-mute-toggle aria-label="Bisukan musik" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 6v12a4 4 0 0 1-4-4H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h3a4 4 0 0 1 4-4Zm6.5 5.5 2.5 2.5-2.5 2.5M17 12h2.5"
+              fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" />
+          </svg>
+        </button>
+        <input class="volume-slider" type="range" min="0" max="100" value="70" aria-label="Volume musik" />
+        <span class="audio-status" role="status" aria-live="polite">Musik dijeda · tekan Putar untuk memulai</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero-panel" aria-labelledby="hero-title">
+        <div class="hero-copy" data-reveal>
+          <p class="kicker">Dunia kecil yang dibuat untukmu</p>
+          <div class="headline-wrap">
+            <h1 id="hero-title">HAPPY BIRTHDAAYY <span>UTIII!!!</span></h1>
+            <div class="headline-orb" aria-hidden="true"></div>
+          </div>
+          <div class="date-chip">8 Oktober</div>
+          <p class="lead">
+            Dunia ulang tahun yang hangat, dirangkai dari hal-hal yang membawa senyum, kenangan pilihan, dan ruang kecil
+            yang terasa seperti milik Uti.
+          </p>
+
+          <div class="button-row">
+            <a class="primary-button" href="#experience" data-enter-audio>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M8 5v14l11-7-11-7Z" fill="currentColor" />
+              </svg>
+              Masuk ke dunia Uti
+            </a>
+            <a class="secondary-button" href="./memories.html">Lihat kenangan</a>
+          </div>
+        </div>
+
+        <div class="hero-visual" data-reveal>
+          <div class="soft-blob blob-one" aria-hidden="true"></div>
+          <div class="soft-blob blob-two" aria-hidden="true"></div>
+          <div class="ring-shape" aria-hidden="true"></div>
+          <div class="floating-tag">Nailong 3D</div>
+          <div class="scene-shell">
+            <canvas id="scene" aria-label="Adegan karakter Nailong tiga dimensi"></canvas>
+          </div>
+          <div class="scene-fallback" aria-live="polite">
+            <p>Memuat dunia ulang tahun. Jika model 3D tidak tersedia, bagian lain tetap bisa dinikmati.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="story-grid" id="experience" aria-label="Bab-bab cerita">
+        <article class="story-card story-card-highlight" data-reveal>
+          <p class="mini-label">Bab 01</p>
+          <h2>Dunia kecil, hati yang luas.</h2>
+          <p>
+            Ulang tahun ini dirangkai seperti album kecil: hangat, ceria, penuh hal sederhana, dan dibuat khusus untuk
+            Uti.
+          </p>
+        </article>
+
+        <article class="story-card" data-reveal>
+          <p class="mini-label">Bab 02</p>
+          <h2>Bahagia ada di hal kecil.</h2>
+          <p>
+            Potret, kebiasaan kecil, dan rasa diperhatikan membuat dunia ini terasa dekat dengan Uti.
+          </p>
+        </article>
+
+        <article class="story-card" data-reveal>
+          <p class="mini-label">Bab 03</p>
+          <h2>Berani dengan lembut.</h2>
+          <p>
+            Semoga bab baru terasa lebih lapang, cerah, dan jujur pada diri sendiri—ruang untuk tumbuh dengan caramu.
+          </p>
+        </article>
+      </section>
+
+      <section class="feature-band" data-reveal>
+        <div class="feature-copy">
+          <p class="kicker">Dunia Uti</p>
+          <h2>Kenangan hangat, energi ceria, dan dunia kecil yang dirangkai penuh perhatian.</h2>
+        </div>
+        <div class="feature-list" aria-label="Isi dunia Uti">
+          <div class="feature-item">
+            <span>01</span>
+            <p>Kenangan pilihan</p>
+          </div>
+          <div class="feature-item">
+            <span>02</span>
+            <p>Pesan penyemangat</p>
+          </div>
+          <div class="feature-item">
+            <span>03</span>
+            <p>Surat ulang tahun</p>
+          </div>
+          <div class="feature-item">
+            <span>04</span>
+            <p>Ucapan penutup</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="memory-preview" aria-label="Cuplikan galeri kenangan">
+        <div class="preview-header" data-reveal>
+          <p class="kicker">Album kecil penuh cerita</p>
+          <h2>Kenangan yang selalu ingin kusimpan.</h2>
+        </div>
+
+        <div class="preview-stage">
+          <div class="preview-grid editorial-collage" data-editorial-collage>
+            <figure class="preview-card tall" data-reveal>
+              <img src="./src/img/Foto Uti/Uti 1.webp" alt="Potret Uti tersenyum mengenakan kerudung merah marun"
+                loading="lazy" />
+              <figcaption>Senyum marun yang langsung menghangatkan bingkai.</figcaption>
+            </figure>
+            <figure class="preview-card" data-reveal>
+              <img src="./src/img/Foto kenangan kita/IMG_4495.JPG" alt="Swafoto tiga orang di luar ruangan"
+                loading="lazy" />
+              <figcaption>Tiga wajah rapat; latar hijaunya ikut menyapa.</figcaption>
+            </figure>
+            <figure class="preview-card" data-reveal>
+              <img src="./src/img/Foto kenangan kita/IMG_5046.png" alt="Swafoto dekat dua orang dengan ekspresi santai"
+                loading="lazy" />
+              <figcaption>Kacamata hitam, ekspresi santai, nol pose formal.</figcaption>
+            </figure>
+            <figure class="preview-card" data-reveal>
+              <img src="./src/img/Foto kenangan kita/IMG_5102.png" alt="Potret berdua di depan cermin" loading="lazy" />
+              <figcaption>Dua gaya bertemu di satu pantulan cermin.</figcaption>
+            </figure>
+            <figure class="preview-card" data-reveal>
+              <img src="./src/img/Foto Uti/IMG_3865.png" alt="Tiga orang berpose sambil memegang buku" loading="lazy" />
+              <figcaption>Buku ikut berpose; senyum-senyumnya tak mau kalah.</figcaption>
+            </figure>
+          </div>
+          <div class="sticker-layer home-stickers" aria-hidden="true">
+            <img class="scrapbook-sticker sticker-wave" src="./src/Stiker/7.png" alt="" loading="lazy" />
+            <img class="scrapbook-sticker sticker-hat" src="./src/Stiker/4.png" alt="" loading="lazy" />
+            <img class="scrapbook-sticker sticker-float" src="./src/Stiker/6.png" alt="" loading="lazy" />
+          </div>
+        </div>
+        <a class="gallery-link" href="./memories.html">Jelajahi semua kenangan <span aria-hidden="true">→</span></a>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Untuk Uti, dari dunia kecil yang dirangkai dengan hangat.</p>
+    </footer>
+  </div>
+
+  <script type="module" src="./script.js"></script>
+</body>
+
+</html>
